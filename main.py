@@ -6,15 +6,57 @@ Date: 12.02.2015
 
 from test import makeTestCases
 
-def avg(classData):
+def avgf(classData):
     '''
     Returns the codebook
     Args:
         classData : Training Data which needs to be aggregated
     Returns:
-        average of the class elements
+        avgData :average of the class elements
     '''
-    return sum(classData)*1.0/len(classData)
+    avgData = []
+    sumData = [0]*len(classData[0])
+    for indSample in classData:
+        startIndex = 0
+        for indData in indSample:
+            sumData[startIndex] += indData
+            startIndex += 1
+    for indSum in sumData :
+        avgData.append(indSum*1.0/len(classData[0]))
+    return avgData
+
+def minf(classData):
+    '''
+    Returns the codebook
+    Args:
+        classData : Training Data which needs to be aggregated
+    Returns:
+        minData : Minimum of the class elements
+    '''
+    minData = [1000000000]*len(classData[0])
+    for indSample in classData:
+        startIndex = 0
+        for indData in indSample:
+            minData[startIndex] = min(minData[startIndex], indData)
+            startIndex += 1
+    return minData
+
+def maxf(classData):
+    '''
+    Returns the codebook
+    Args:
+        classData : Training Data which needs to be aggregated
+    Returns:
+        maxData : Maximum of the class elements
+    '''
+    maxData = [-1]*len(classData[0])
+    for indSample in classData:
+        startIndex = 0
+        for indData in indSample:
+            maxData[startIndex] = max(maxData[startIndex], indData)
+            startIndex += 1
+    return maxData
+
     
 def train (trainingData, aggregation):
     '''
@@ -33,15 +75,15 @@ def train (trainingData, aggregation):
     if (aggregation == 'a'):
         for indClass in trainingData: 
             classNo += 1
-            codeBook.append({(classNo, avg(indClass)) : indClass})
+            codeBook.append({classNo: avgf(indClass)})
     elif (aggregation== 'm'):
         for indClass in trainingData: 
             classNo += 1
-            codeBook.append({(classNo, min(indClass)) : indClass})
+            codeBook.append({classNo: minf(indClass)})
     elif (aggregation == 'M'):
         for indClass in trainingData: 
             classNo += 1
-            codeBook.append({(classNo, max(indClass)) : indClass})
+            codeBook.append({classNo: maxf(indClass)})
     else: 
         raise Exception("Aggregation Type doesn't matches with the defined types")
         return 
@@ -57,11 +99,20 @@ def test (testData, codeBook, similarityMetric):
                         'm' for manhattan
     Returns:
         testResults : Results corresponding to the codeBook according to
-                        our classifier
+                        our classifier.It's an array of testCases
     ''' 
     testResults = []
+    if(similarityMetric == 'e'):
+        print "ha"
+    elif(similarityMetric == 'm'):
+        print "hah"
+    else: 
+        raise Exception("Similarity metric doesn't matches with the defined types")
+        return 
     return testResults
 
 if __name__ == '__main__':
-    trainingData = makeTestCases([1,5], 3, 4)
-    print train(trainingData, 'm')
+    trainingData = makeTestCases([1,5], 2, 3, 4)
+    print train(trainingData, 'a')
+    ##testData = makeTestCases([1,8],3,2)
+    ##print test(testData, codeBook, 'e')

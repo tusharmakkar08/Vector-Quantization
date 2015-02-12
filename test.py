@@ -6,11 +6,12 @@ Date: 12.02.2015
 
 import random
 
-def makeTestCases (rangeOfFeatures , numberOfFeatures, numberOfTestCases):
+def makeTestCases (rangeOfFeatures ,numberOfSamples, numberOfFeatures, numberOfTestCases):
     '''
     Returns the matrix of Test Cases
     Args:
         rangeOfFeatures : The numerical range of features [min, max]
+        numberOfSamples : Total number of Sample in a matrix
         numberOfFeatures : Total number of Features per feature vector
         numberOfTestCases : Total Number of Test Cases we want
     Returns:
@@ -19,10 +20,13 @@ def makeTestCases (rangeOfFeatures , numberOfFeatures, numberOfTestCases):
     testCases = []
     for testCase in xrange(numberOfTestCases):
         tempTestCase = []
-        for feature in xrange(numberOfFeatures):
-            tempTestCase.append(random.randint(rangeOfFeatures[0], rangeOfFeatures[1]))
+        for sample in xrange(numberOfSamples): 
+            tempSample = []
+            for feature in xrange(numberOfFeatures):
+                tempSample.append(random.randint(rangeOfFeatures[0], rangeOfFeatures[1]))
+            tempTestCase.append(tempSample)
         testCases.append(tempTestCase)
     return testCases
 
 if __name__ == '__main__':
-    print makeTestCases([1,5], 3, 4)
+    print makeTestCases([1,5], 2, 3, 4)
