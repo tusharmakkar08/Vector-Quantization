@@ -5,6 +5,7 @@ Date: 12.02.2015
 '''
 
 from test import makeTestCases
+from math import sqrt
 
 def avgf(classData):
     '''
@@ -89,6 +90,38 @@ def train (trainingData, aggregation):
         return 
     return codeBook
 
+def euclidean (codeWord, testData):
+    '''
+    Returns the 
+    Args:
+        codeWord : The Word in codeBook corresponding to each class
+        testData : The Data which needs to be tested
+    Returns:
+        distance : Euclidean Distance
+    '''
+    distance = 0 
+    index = 0
+    for feature in codeWord : 
+        distance += abs((feature - testData[0][index])*(feature - testData[0][index]))
+        index += 1
+    return sqrt(distance)
+
+def manhattan (codeWord, testData):
+    '''
+    Returns the 
+    Args:
+        codeWord : The Word in codeBook corresponding to each class
+        testData : The Data which needs to be tested
+    Returns:
+        distance : Manhattan Distance
+    '''
+    distance = 0 
+    index = 0
+    for feature in codeWord : 
+        distance += abs(feature - testData[0][index])
+        index += 1
+    return sqrt(distance)
+    
 def test (testData, codeBook, similarityMetric):
     '''
     Returns the 
@@ -105,18 +138,22 @@ def test (testData, codeBook, similarityMetric):
     if(similarityMetric == 'e'):
         for indTest in testData: 
             testRes = 0 ## No class numbered 0
+            currEucl = 10000000000
             for indTrainData in codeBook: 
-                tempEucl = euclidean(codeBook[indTrainData], indTest)
+                tempEucl = euclidean(indTrainData[indTrainData.keys()[0]], indTest)
                 if(tempEucl < currEucl):
-                    testRes = indTrainData
+                    testRes = indTrainData.keys()[0]
+                    currEucl = tempEucl
             testResults.append(testRes)
     elif(similarityMetric == 'm'):
         for indTest in testData: 
             testRes = 0 ## No class numbered 0
+            currMan = 10000000000
             for indTrainData in codeBook: 
-                tempMan = manhattan(codeBook[indTrainData], indTest)
+                tempMan = manhattan(indTrainData[indTrainData.keys()[0]], indTest)
                 if(tempMan < currMan):
-                    testRes = indTrainData
+                    testRes = indTrainData.keys()[0]
+                    currMan = tempMan
             testResults.append(testRes)
     else: 
         raise Exception("Similarity metric doesn't matches with the defined types")
@@ -127,4 +164,6 @@ if __name__ == '__main__':
     trainingData = makeTestCases([1,5], 2, 3, 4)
     codeBook = train(trainingData, 'a')
     testData = makeTestCases([1,8], 1, 3, 2)
+    print codeBook
+    print testData
     print test(testData, codeBook, 'e')
