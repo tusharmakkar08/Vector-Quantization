@@ -4,8 +4,18 @@ Author: Tushar Makkar <tusharmakkar08[at]gmail.com>
 Date: 12.02.2015
 '''
 
-import test
+from test import makeTestCases
 
+def avg(classData):
+    '''
+    Returns the codebook
+    Args:
+        classData : Training Data which needs to be aggregated
+    Returns:
+        average of the class elements
+    '''
+    return sum(classData)*1.0/len(classData)
+    
 def train (trainingData, aggregation):
     '''
     Returns the codebook
@@ -17,6 +27,24 @@ def train (trainingData, aggregation):
         codeBook : Code Book corresponding to the training data
     '''
     codeBook = []
+    # [[class, code] : [training Data], .. ]
+    classNo = 0 
+    # Initial Class number = 0
+    if (aggregation == 'a'):
+        for indClass in trainingData: 
+            classNo += 1
+            codeBook.append({(classNo, avg(indClass)) : indClass})
+    elif (aggregation== 'm'):
+        for indClass in trainingData: 
+            classNo += 1
+            codeBook.append({(classNo, min(indClass)) : indClass})
+    elif (aggregation == 'M'):
+        for indClass in trainingData: 
+            classNo += 1
+            codeBook.append({(classNo, max(indClass)) : indClass})
+    else: 
+        raise Exception("Aggregation Type doesn't matches with the defined types")
+        return 
     return codeBook
 
 def test (testData, codeBook, similarityMetric):
@@ -35,4 +63,5 @@ def test (testData, codeBook, similarityMetric):
     return testResults
 
 if __name__ == '__main__':
-    
+    trainingData = makeTestCases([1,5], 3, 4)
+    print train(trainingData, 'm')
