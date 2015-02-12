@@ -103,9 +103,21 @@ def test (testData, codeBook, similarityMetric):
     ''' 
     testResults = []
     if(similarityMetric == 'e'):
-        print "ha"
+        for indTest in testData: 
+            testRes = 0 ## No class numbered 0
+            for indTrainData in codeBook: 
+                tempEucl = euclidean(codeBook[indTrainData], indTest)
+                if(tempEucl < currEucl):
+                    testRes = indTrainData
+            testResults.append(testRes)
     elif(similarityMetric == 'm'):
-        print "hah"
+        for indTest in testData: 
+            testRes = 0 ## No class numbered 0
+            for indTrainData in codeBook: 
+                tempMan = manhattan(codeBook[indTrainData], indTest)
+                if(tempMan < currMan):
+                    testRes = indTrainData
+            testResults.append(testRes)
     else: 
         raise Exception("Similarity metric doesn't matches with the defined types")
         return 
@@ -113,6 +125,6 @@ def test (testData, codeBook, similarityMetric):
 
 if __name__ == '__main__':
     trainingData = makeTestCases([1,5], 2, 3, 4)
-    print train(trainingData, 'a')
-    ##testData = makeTestCases([1,8],3,2)
-    ##print test(testData, codeBook, 'e')
+    codeBook = train(trainingData, 'a')
+    testData = makeTestCases([1,8], 1, 3, 2)
+    print test(testData, codeBook, 'e')
